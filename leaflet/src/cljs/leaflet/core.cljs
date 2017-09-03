@@ -19,10 +19,16 @@
   (.addTo (.marker js/L #js [52.53107999999999 -1.9730885000000171]) leaflet)
   )
 
+(defn tooltip-market [leaflet]
+  (let [marker (.marker js/L #js [52.53107999999999 -1.9730885000000171])]
+  (.bindPopup (.addTo marker leaflet) "yo and yo")))
+
 (defn home-did-mount []
   (let [leaflet (.setView (.map js/L "mapdiv") #js [52.53107999999999 -1.9730885000000171] 11)]
     (do (mount-tiles leaflet)
-        (mount-pointer leaflet))))
+        (tooltip-market leaflet)
+        )))
+
 
 (defn home []
   (reagent/create-class {:reagent-render home-html
