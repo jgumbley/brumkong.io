@@ -6,7 +6,7 @@
                         :width "100vw"}}])
 
 (def tile-url
-  "http://{s}.tile2.openclemap.org/transport/{z}/{x}/{y}.png")
+  "http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.png")
 
 (defn home-did-mount []
   (let [leaflet (.setView (.map js/L "mapdiv") #js [52.53107999999999 -1.9730885000000171] 11)]
