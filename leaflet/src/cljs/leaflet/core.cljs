@@ -7,11 +7,9 @@
 
 (defn home-did-mount []
   (let [leaflet (.setView (.map js/L "mapdiv") #js [52.53107999999999 -1.9730885000000171] 11)]
-    (.addTo (.tileLayer js/L "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}"
+    (.addTo (.tileLayer js/L "http://{s}.tile2.opencyclemap.org/transport/{z}/{x}/{y}.png"
                         (clj->js {:attribution "Map data &copy; [...]"
                                   :maxZoom 18
-                                  :id "mapbox.streets"
-                                  :accessToken "pk.eyJ1IjoiYnJ1bWtvbmciLCJhIjoiY2o3M2F3N3kzMDVtMDMzczNjMGRhNmF2cSJ9.RaMO5JFeQGbdCrbjkI_5Hg"
                                   }))
             leaflet)))
 
