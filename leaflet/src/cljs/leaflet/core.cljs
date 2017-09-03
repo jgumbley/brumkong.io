@@ -8,13 +8,21 @@
 (def tile-url
   "http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.png")
 
+(defn mount-tiles [leaflet]
+  (.addTo (.tileLayer js/L tile-url
+                    (clj->js {:attribution "Map data &copy; [...]"
+                              :maxZoom 18
+                              }))
+        leaflet))
+
+(defn mount-pointer [leaflet]
+  (.addTo (.marker js/L #js [52.53107999999999 -1.9730885000000171]) leaflet)
+  )
+
 (defn home-did-mount []
   (let [leaflet (.setView (.map js/L "mapdiv") #js [52.53107999999999 -1.9730885000000171] 11)]
-    (.addTo (.tileLayer js/L tile-url
-                        (clj->js {:attribution "Map data &copy; [...]"
-                                  :maxZoom 18
-                                  }))
-            leaflet)))
+    (do (mount-tiles leaflet)
+        (mount-pointer leaflet))))
 
 (defn home []
   (reagent/create-class {:reagent-render home-html

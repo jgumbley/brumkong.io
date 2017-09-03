@@ -1,3 +1,4 @@
 leaflet/target
 *.#*
 leaflet/resources/public/js/compiled/app.js
+*.log
