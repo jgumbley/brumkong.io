@@ -19,19 +19,19 @@
   (.addTo (.marker js/L #js [52.53107999999999 -1.9730885000000171]) leaflet)
   )
 
-
-
-
-(defn tooltip-market [copytext long lat leafletmap ]
-  (let [marker (.marker js/L #js [long lat])]
-  (.openPopup (.bindPopup (.addTo marker leafletmap) copytext))))
+(defn add-marker-to-this-leaflet-map [leafletmap]
+  (fn add-marker [copytext long lat]
+    (let [marker (.marker js/L #js [long lat])]
+      (.openPopup (.bindPopup (.addTo marker leafletmap) copytext))))
+  )
 
 (defn home-did-mount []
   (let [leaflet (.setView (.map js/L "mapdiv") #js [52.53107999999999 -1.9730885000000171] 11)]
+    (let [add-marker (add-marker-to-this-leaflet-map leaflet)]
     (do (mount-tiles leaflet)
-        (tooltip-market "yozer" 52.53107999999999 -1.9730885000000171 leaflet)
-        (tooltip-market "nozer" 51.53107999999999 -1.9730885000000171 leaflet)
-        )))
+        (add-marker "yozer" 52.53107999999999 -1.9730885000000171)
+        (add-marker "nozer" 52.52107999999999 -1.9730885000000171)
+        ))))
 
 
 (defn home []
