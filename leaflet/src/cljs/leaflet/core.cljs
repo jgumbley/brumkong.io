@@ -10,23 +10,27 @@
 
 (defn mount-tiles [leaflet]
   (.addTo (.tileLayer js/L tile-url
-                    (clj->js {:attribution "Map data &copy; [...]"
+                    (clj->js {:attribution "From OpenStreetmap"
                               :maxZoom 18
                               }))
-        leaflet))
+            leaflet))
 
 (defn mount-pointer [leaflet]
   (.addTo (.marker js/L #js [52.53107999999999 -1.9730885000000171]) leaflet)
   )
 
-(defn tooltip-market [leaflet]
-  (let [marker (.marker js/L #js [52.53107999999999 -1.9730885000000171])]
-  (.bindPopup (.addTo marker leaflet) "yo and yo")))
+
+
+
+(defn tooltip-market [copytext long lat leafletmap ]
+  (let [marker (.marker js/L #js [long lat])]
+  (.openPopup (.bindPopup (.addTo marker leafletmap) copytext))))
 
 (defn home-did-mount []
   (let [leaflet (.setView (.map js/L "mapdiv") #js [52.53107999999999 -1.9730885000000171] 11)]
     (do (mount-tiles leaflet)
-        (tooltip-market leaflet)
+        (tooltip-market "yozer" 52.53107999999999 -1.9730885000000171 leaflet)
+        (tooltip-market "nozer" 51.53107999999999 -1.9730885000000171 leaflet)
         )))
 
 
