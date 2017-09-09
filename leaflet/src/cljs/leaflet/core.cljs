@@ -11,8 +11,19 @@
   "http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.png")
 
 (def places [
-  ["yozer" 52.53107999999999 -1.9730885000000171]
-  ["bifh" 52.52107999999999 -1.9730885000000171]
+             [ "birmingham"	52.486243	-1.890401 ]
+             [ "wolverhampton"	52.586973	-2.12882 ]
+             [ "walsall"	52.586214	-1.982919 ]
+             [ "sutton coldfield"	52.570385	-1.824042 ]
+             [ "dudley"	52.512255	-2.081112 ]
+             [ "west brom"	52.509038	-1.963938 ]
+             [ "halesowen"	52.449845	-2.050526 ]
+             [ "stechford"	52.48396	-1.807598 ]
+             [ "chelmsley wood"	52.479201	-1.732631 ]
+             [ "longbridge"	52.388445	-1.977676 ]
+             [ "kings heath"	52.432447	-1.893119 ]
+             [ "solihull"	52.411811	-1.77761 ]
+             [ "erdington" 52.521931 -1.844611 ]
   ])
 
 (defn mount-tiles [leaflet]
