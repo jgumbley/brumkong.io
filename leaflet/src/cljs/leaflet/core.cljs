@@ -1,5 +1,7 @@
 (ns leaflet.core
-    (:require [reagent.core :as reagent]))
+  (:require [reagent.core :as reagent]))
+
+(enable-console-print!)
 
 (defn home-html []
   [:div#mapdiv {:style {:height "100vh"
@@ -8,16 +10,17 @@
 (def tile-url
   "http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.png")
 
+(def places [
+  ["yozer" 52.53107999999999 -1.9730885000000171]
+  ["bifh" 52.52107999999999 -1.9730885000000171]
+  ])
+
 (defn mount-tiles [leaflet]
   (.addTo (.tileLayer js/L tile-url
                     (clj->js {:attribution "From OpenStreetmap"
                               :maxZoom 18
                               }))
             leaflet))
-
-(defn mount-pointer [leaflet]
-  (.addTo (.marker js/L #js [52.53107999999999 -1.9730885000000171]) leaflet)
-  )
 
 (defn add-marker-to-this-leaflet-map [leafletmap]
   (fn add-marker [copytext long lat]
@@ -27,10 +30,9 @@
 
 (defn home-did-mount []
   (let [leaflet (.setView (.map js/L "mapdiv") #js [52.53107999999999 -1.9730885000000171] 11)]
-    (let [add-marker (add-marker-to-this-leaflet-map leaflet)]
+    (let [add (add-marker-to-this-leaflet-map leaflet)]
     (do (mount-tiles leaflet)
-        (add-marker "yozer" 52.53107999999999 -1.9730885000000171)
-        (add-marker "nozer" 52.52107999999999 -1.9730885000000171)
+        (doseq [place places] (apply add place))
         ))))
 
 
