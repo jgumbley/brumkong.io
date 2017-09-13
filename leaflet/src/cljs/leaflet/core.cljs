@@ -41,11 +41,16 @@
       (.openTooltip (.bindTooltip (.addTo marker leafletmap) copytext #js { :permanent true :direction "center" :className "tooltip"} ))))
   )
 
+(defn zoomchange []
+  (println "yozeabit")
+  )
+
 (defn home-did-mount []
   (let [leaflet (.setView (.map js/L "mapdiv" #js { :minZoom 10 }) #js [52.53107999999999 -1.9730885000000171] 11   )]
     (let [add (add-marker-to-this-leaflet-map leaflet)]
     (do (mount-tiles leaflet)
         (doseq [place places] (apply add place))
+        (.on leaflet "zoomend" zoomchange)
         ))))
 
 
