@@ -6,6 +6,8 @@
 
 (enable-console-print!)
 
+(def !local (atom {}))
+
 (defn home-html []
   [:div#mapdiv {:style {:height "100vh"
                         :width "100vw"}}
@@ -14,6 +16,10 @@
 
 (def tile-url
   "http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.png")
+
+(def moarplaces [
+             [ "Binninghub"	52.487243	-1.890401 ]
+    ])
 
 (def places [
              [ "Birmingham"	52.486243	-1.890401 ]
@@ -45,11 +51,15 @@
   )
 
 (defn zoomchange []
-  (println "yozeabit")
-  )
+  (let [leaflet (:leaflet @!local)]
+    (let [add (add-marker-to-this-leaflet-map leaflet)]
+      (doseq [place moarplaces] (apply add place))
+      )
+  ))
 
 (defn home-did-mount []
-  (let [leaflet (.setView (.map js/L "mapdiv" #js { :minZoom 10 }) #js [52.53107999999999 -1.9730885000000171] 11   )]
+  (reset! !local {:leaflet (.setView (.map js/L "mapdiv" #js { :minZoom 10 }) #js [52.53107999999999 -1.9730885000000171] 11 )})
+  (let [leaflet (:leaflet @!local)]
     (let [add (add-marker-to-this-leaflet-map leaflet)]
     (do (mount-tiles leaflet)
         (doseq [place places] (apply add place))
