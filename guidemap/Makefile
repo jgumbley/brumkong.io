@@ -4,12 +4,12 @@ endef
 
 .PHONY: run
 run:
-	lein figwheel
+	LEIN_FAST_TRAMPOLINE=y; lein figwheel
 	$(call green,"[Upped]")
 
 .PHONY: test
 test:
-	lein test
+	LEIN_FAST_TRAMPOLINE=y; lein doo phantom test once
 	$(call green,"[Upped]")
 
 .PHONY: less
