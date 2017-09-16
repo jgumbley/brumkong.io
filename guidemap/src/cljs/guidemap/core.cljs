@@ -120,6 +120,7 @@
   (let [leaflet (:leaflet @!local)]
     (let [add (add-marker-to-this-leaflet-map leaflet)]
       (doseq [place moarplaces] (apply add place))
+      (println (.getZoom leaflet))
       )
   ))
 
