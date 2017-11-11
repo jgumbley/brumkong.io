@@ -34,12 +34,13 @@
   (let [leaflet (:leaflet @!local)
         zoomlevel (.getZoom leaflet)]
     (do
-      (if (> zoomlevel 11) (addplaces))
+      (if (> zoomlevel 11) (add-edgbo leaflet))
+      (if (<= zoomlevel 11) (rm-edgbo leaflet))
       (println zoomlevel)
       ))
   )
 
-(defn addplaces []
+(defn init-moarplaces []
   (let [leaflet (:leaflet @!local)
         add (add-marker-to-this-leaflet-map leaflet)]
     (doseq [place p/moarplaces] (apply add place))
@@ -50,6 +51,29 @@
     (doseq [place p/places] (apply add place))
     ))
     
+(def !edgbo (atom {}))
+
+(defn init-edgbo [leaflet]
+  [ "Edgbaston"	52.460801	-1.914995 ]
+  (let [edgbo-marker (.circleMarker js/L #js [52.460801 -1.914995] #js { :radius 0 } )]
+    (do
+      (.openTooltip (.bindTooltip edgbo-marker "edgbo" #js { :permanent true :direction "center" :className "tooltip"} ))
+      (reset! !edgbo {:edgbo edgbo-marker})
+    )))
+
+(defn add-edgbo [leaflet]
+  (let [edgbo-marker (:edgbo @!edgbo)]
+    (do
+      (.addLayer leaflet edgbo-marker)
+      (println "edgbo on")
+    )))
+
+(defn rm-edgbo [leaflet]
+  (let [edgbo-marker (:edgbo @!edgbo)]
+    (do
+      (.removeLayer leaflet edgbo-marker)
+      (println "edgbo on")
+      )))
 
 (defn initialise-map []
   (reset! !local {:leaflet (.setView (.map js/L "mapdiv" #js { :minZoom 10 }) #js [52.53107999999999 -1.9730885000000171] 11 )})
@@ -57,6 +81,7 @@
     (do
       (mount-tiles leaflet)
       (init-overviewplaces leaflet)
+      (init-edgbo leaflet)
       (.on leaflet "zoomend" zoomchange)
       )))
 
