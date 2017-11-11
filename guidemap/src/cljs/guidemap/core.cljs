@@ -20,11 +20,9 @@
 
 
 (defn mount-tiles [leaflet]
-  (.addTo (.tileLayer js/L tile-url
-                    (clj->js {:attribution "From OpenStreetmap"
-                              :maxZoom 18
-                              }))
-            leaflet))
+  (.addTo
+   (.tileLayer
+    js/L tile-url (clj->js {:attribution "From OpenStreetmap" :maxZoom 18 })) leaflet))
 
 (defn add-marker-to-this-leaflet-map [leafletmap]
   (fn add-marker [copytext long lat]
@@ -33,26 +31,38 @@
   )
 
 (defn zoomchange []
-  (let [leaflet (:leaflet @!local)]
-    (let [add (add-marker-to-this-leaflet-map leaflet)]
-      (doseq [place p/moarplaces] (apply add place))
-      (println (.getZoom leaflet))
-      )
-  ))
+  (let [leaflet (:leaflet @!local)
+        zoomlevel (.getZoom leaflet)]
+    (do
+      (if (> zoomlevel 11) (addplaces))
+      (println zoomlevel)
+      ))
+  )
 
-(defn home-did-mount []
+(defn addplaces []
+  (let [leaflet (:leaflet @!local)
+        add (add-marker-to-this-leaflet-map leaflet)]
+    (doseq [place p/moarplaces] (apply add place))
+    ))
+
+(defn init-overviewplaces [leaflet]
+  (let [add (add-marker-to-this-leaflet-map leaflet)]
+    (doseq [place p/places] (apply add place))
+    ))
+    
+
+(defn initialise-map []
   (reset! !local {:leaflet (.setView (.map js/L "mapdiv" #js { :minZoom 10 }) #js [52.53107999999999 -1.9730885000000171] 11 )})
   (let [leaflet (:leaflet @!local)]
-    (let [add (add-marker-to-this-leaflet-map leaflet)]
-    (do (mount-tiles leaflet)
-        (doseq [place p/places] (apply add place))
-        (.on leaflet "zoomend" zoomchange)
-        ))))
-
+    (do
+      (mount-tiles leaflet)
+      (init-overviewplaces leaflet)
+      (.on leaflet "zoomend" zoomchange)
+      )))
 
 (defn home-page []
   (reagent/create-class {:reagent-render home-html
-                         :component-did-mount home-did-mount}))
+                         :component-did-mount initialise-map}))
 
 ;; -------------------------
 ;; Views
